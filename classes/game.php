@@ -2,6 +2,14 @@
 
 class Game extends DB
 {
+	const CARD_STATUS_OPEN = 1;
+	const CARD_STATUS_DEALER = 2;
+
+	const CODE_DIAMONDS = 1; // бубна
+	const CODE_CLUBS = 2; // креста
+	const CODE_SPADES = 3; // пика
+	const CODE_HEARTS = 4; // черва
+
 	public $player;
 	public $dealer;
 	public $deck;
@@ -12,6 +20,7 @@ class Game extends DB
 			parent::connect();
 			$this->player = $player;
 			$this->getDeck();
+			$this->dealer = new Dealer($this->deck);
 		}
 	}
 	
@@ -29,7 +38,7 @@ class Game extends DB
 			$deckMass = array();
 			for ($j = 1; $j < 5; $j++) {
 				for ($i = 1; $i < 14; $i++) {
-					$deckMass[] = $i.'*'.$j;
+					$deckMass[] = $i.'*'.$j.'*'.self::CARD_STATUS_OPEN;
 				}
 			}
 			shuffle($deckMass);

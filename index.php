@@ -38,7 +38,13 @@ else if (!empty($_POST)) {
 					</form>
 				</div>
 			<?php else : ?>
-				<div id="dealer-block"></div>
+				<div id="dealer-block">
+					<?php foreach ($game->dealer->cards as $card) : ?>
+						<div class="card-block">
+							<h1><?=cardCode($card)?></h1>
+						</div>
+					<?php endforeach; ?>
+				</div>
 				<div id="player-block">
 					<div id="cards-block"></div>
 					<div id="player-info">

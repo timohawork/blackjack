@@ -7,3 +7,16 @@
 #login-block {
 	text-align: center;
 }
+
+.card-block {
+	display: inline-block;
+	position: relative;
+	left: -40px;
+	width: 150px;
+	height: 300px;
+	border: 1px solid black;
+}
+
+.card-block:first-child {
+	left: 0;
+}
