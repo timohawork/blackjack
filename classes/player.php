@@ -19,7 +19,7 @@ class Player extends DB
 		if (empty($this->name)) {
 			return false;
 		}
-		$player = $this->getData();
+		$player = $this->getPlayerData();
 		if (null !== $player) {
 			$_SESSION['id'] = $this->id = $player['id'];
 			$_SESSION['name'] = $this->name;
@@ -32,28 +32,41 @@ class Player extends DB
 		if (empty($this->name) || isset($_SESSION['id'])) {
 			return false;
 		}
-		$player = $this->getData();
+		$player = $this->getPlayerData();
 		if (null !== $player) {
 			$this->money = $player['money'];
 		}
 		else {
 			$sql = "INSERT INTO players (name, money) VALUES ('".$this->name."', ".self::START_MONEY.")";
 			$this->_db->query($sql);
-			$player = $this->getData();
+			$player = $this->getPlayerData();
 			$this->money = self::START_MONEY;
 		}
 		$_SESSION['id'] = $this->id = $player['id'];
 		$_SESSION['name'] = $this->name;
 	}
 	
-	protected function getData()
+	public function logout()
 	{
-		$sql = "
-			SELECT id, name, money
-			FROM players
-			WHERE name = '{$this->name}'
-		";
-		return $this->_db->query($sql)->fetch_assoc();
+		if (empty($_SESSION)) {
+			return false;
+		}
+		session_destroy();
+		unset($_SESSION);
+		return true;
+	}
+	
+	protected function getPlayerData()
+	{
+		return $this->getData(array(
+			'select' => array('id', 'name', 'money'),
+			'from' => 'players',
+			'where' => array(array(
+				'name' => 'name',
+				'operator' => '=',
+				'value' => $this->name
+			))
+		));
 	}
 }
 

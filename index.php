@@ -4,9 +4,15 @@ session_start();
 
 include_once 'functions.php';
 include_once './classes/player.php';
+include_once './classes/game.php';
+include_once './classes/dealer.php';
 
 if (!empty($_SESSION)) {
 	$player = new Player($_SESSION['name']);
+	$game = new Game();
+	if (isset($_GET['do'])) {
+		'logout' === $_GET['do'] && $player->logout() && header("Location: index.php");
+	}
 }
 else if (!empty($_POST)) {
 	$player = new Player($_POST['name']);
@@ -34,7 +40,9 @@ else if (!empty($_POST)) {
 				<div id="dealer-block"></div>
 				<div id="player-block">
 					<div id="cards-block"></div>
-					<div id="player-info"></div>
+					<div id="player-info">
+						<a href="index.php?do=logout">Выйти</a>
+					</div>
 				</div>
 			<?php endif; ?>
 		</div>
