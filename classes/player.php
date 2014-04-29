@@ -58,7 +58,7 @@ class Player extends DB
 	
 	protected function getPlayerData()
 	{
-		return $this->getData(array(
+		return $this->select(array(
 			'select' => array('id', 'name', 'money'),
 			'from' => 'players',
 			'where' => array(array(

@@ -9,10 +9,11 @@ include_once './classes/dealer.php';
 
 if (!empty($_SESSION)) {
 	$player = new Player($_SESSION['name']);
-	$game = new Game();
 	if (isset($_GET['do'])) {
 		'logout' === $_GET['do'] && $player->logout() && header("Location: index.php");
 	}
+	$game = new Game($player);
+	$game->start();
 }
 else if (!empty($_POST)) {
 	$player = new Player($_POST['name']);
