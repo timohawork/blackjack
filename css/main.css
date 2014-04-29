@@ -8,15 +8,74 @@
 	text-align: center;
 }
 
+#dealer-block {
+	position: relative;
+	width: 600px;
+	margin: auto;
+	text-align: center;
+}
+
 .card-block {
 	display: inline-block;
 	position: relative;
 	left: -40px;
-	width: 150px;
-	height: 300px;
-	border: 1px solid black;
+	width: 98px;
+	height: 143px;
+	background-color: #ffffff;
+	border: 1px solid #000000;
+	border-radius: 5px;
+	text-align: left;
 }
 
-.card-block:first-child {
+.card-block.pos1 {
 	left: 0;
+	z-index: 1;
+}
+
+.card-block.pos2 {
+	left: -40px;
+	z-index: 2;
+}
+
+.card-block.pos3 {
+	left: -80px;
+	z-index: 3;
+}
+
+.card-block.pos4 {
+	left: -120px;
+	z-index: 4;
+}
+
+.card-block.pos5 {
+	left: -160px;
+	z-index: 5;
+}
+
+.card-block .lear {
+	display: inline-block;
+	width: 24px;
+	height: 26px;
+	background-image: url("../img/lears.jpg");
+}
+
+.card-block span {
+	display: inline-block;
+	margin: 5px 0 0 5px;
+}
+
+.card-block .lear.diamonds {
+	background-position: 84px 0;
+}
+
+.card-block .lear.clubs {
+	background-position: 56px 0;
+}
+
+.card-block .lear.spades {
+	background-position: 29px 0;
+}
+
+.card-block .lear.hearts {
+	background-position: -8px 0;
 }
