@@ -4,6 +4,7 @@ class Game extends DB
 {
 	const CARD_STATUS_OPEN = 1;
 	const CARD_STATUS_DEALER = 2;
+	const CARD_STATUS_PLAYER = 3;
 
 	const CODE_DIAMONDS = 1; // бубна
 	const CODE_CLUBS = 2; // креста
@@ -42,6 +43,18 @@ class Game extends DB
 				}
 			}
 			shuffle($deckMass);
+			
+			foreach ($deckMass as $num => $card) {
+				$card = getCardInfo($card);
+				if (0 == $num || 2 == $num) {
+					$card['status'] = self::CARD_STATUS_DEALER;
+					$deckMass[$num] = collectCardCode($card);
+				}
+				elseif (1 == $num || 3 == $num) {
+					$card['status'] = self::CARD_STATUS_PLAYER;
+					$deckMass[$num] = collectCardCode($card);
+				}
+			}
 			$this->deck = $deckMass;
 			$this->setDeck($deckMass);
 		}
@@ -80,6 +93,24 @@ class Game extends DB
 				'cards' => null !== $deck ? serialize($deck) : null
 			)
 		));
+	}
+	
+	public function getPlayerCards()
+	{
+		if (empty($this->deck)) {
+			return false;
+		}
+		$cards = array();
+		foreach ($this->deck as $card) {
+			$card = getCardInfo($card);
+			if (false !== $card && self::CARD_STATUS_PLAYER == $card['status']) {
+				$cards[] = array(
+					'value' => $card['value'],
+					'lear' => $card['lear'],
+				);
+			}
+		}
+		return $cards;
 	}
 }
 

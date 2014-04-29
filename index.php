@@ -42,60 +42,24 @@ else if (!empty($_POST)) {
 					<h1>Карты дилера</h1>
 					<?php $postiton = 1; ?>
 					<?php foreach ($game->dealer->cards as $card) : ?>
-						<?php 
-							$value = $lear = '';
-							switch ($card['value']) {
-								case 1:
-									$value = 'Т';
-								break;
-							
-								case 11:
-									$value = 'В';
-								break;
-							
-								case 12:
-									$value = 'Д';
-								break;
-							
-								case 13:
-									$value = 'К';
-								break;
-							
-								default:
-									$value .= $card['value'];
-								break;
-							}
-							switch ($card['lear']) {
-								case Game::CODE_DIAMONDS:
-									$lear = 'diamonds';
-								break;
-							
-								case Game::CODE_CLUBS:
-									$lear = 'clubs';
-								break;
-							
-								case Game::CODE_SPADES:
-									$lear = 'spades';
-								break;
-							
-								case Game::CODE_HEARTS:
-									$lear = 'hearts';
-								break;
-							}
-						?>
-						<div class="card-block pos<?=$postiton?>">
-							<span><?=$value?></span>
-							<div class="lear <?=$lear?>">&nbsp;</div>
-						</div>
+						<?=cardHtml($card, $postiton)?>
 						<?php $postiton++; ?>
 					<?php endforeach; ?>
 				</div>
 				<div id="player-block">
-					<div id="cards-block"></div>
+					<div id="cards-block">
+						<h1>Выши карты</h1>
+						<?php $postiton = 1; ?>
+						<?php foreach ($game->getPlayerCards() as $card) : ?>
+							<?=cardHtml($card, $postiton)?>
+							<?php $postiton++; ?>
+						<?php endforeach; ?>
+					</div>
 					<div id="player-info">
 						<a href="index.php?do=logout">Выйти</a>
 					</div>
 				</div>
+				<?php //var_dump($game->deck); ?>
 			<?php endif; ?>
 		</div>
 	</body>

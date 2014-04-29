@@ -9,4 +9,59 @@ function getCardInfo($card) {
 	) : false;
 }
 
+function collectCardCode($card)
+{
+	if (!is_array($card)) {
+		return false;
+	}
+	return $card['value'].'*'.$card['lear'].'*'.$card['status'];
+}
+
+function cardHtml($card, $postiton)
+{
+	$value = $lear = '';
+	switch ($card['value']) {
+		case 1:
+			$value = 'Т';
+		break;
+
+		case 11:
+			$value = 'В';
+		break;
+
+		case 12:
+			$value = 'Д';
+		break;
+
+		case 13:
+			$value = 'К';
+		break;
+
+		default:
+			$value = $card['value'];
+		break;
+	}
+	switch ($card['lear']) {
+		case Game::CODE_DIAMONDS:
+			$lear = 'diamonds';
+		break;
+
+		case Game::CODE_CLUBS:
+			$lear = 'clubs';
+		break;
+
+		case Game::CODE_SPADES:
+			$lear = 'spades';
+		break;
+
+		case Game::CODE_HEARTS:
+			$lear = 'hearts';
+		break;
+	}
+	return '<div class="card-block pos'.$postiton.'">
+		<span>'.$value.'</span>
+		<div class="lear '.$lear.'">&nbsp;</div>
+	</div>';
+}
+
 ?>
