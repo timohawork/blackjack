@@ -45,6 +45,22 @@ class DB
 		$sql = "INSERT INTO {$data['table']} (".implode(', ', $names).") VALUES (".implode(', ', $values).")";
 		return $this->_db->query($sql);
 	}
+	
+	protected function update($data)
+	{
+		if (empty($data)) {
+			return false;
+		}
+		$values = $whereSql = array();
+		foreach ($data['values'] as $name => $value) {
+			$values[] = $name.' = '.(is_numeric($value) ? $value : "'".$value."'");
+		}
+		foreach ($data['where'] as $where) {
+			$whereSql[] = $where['name'].' '.$where['operator'].' '.(is_numeric($where['value']) ? $where['value'] : "'".$where['value']."'");
+		}
+		$sql = "UPDATE {$data['table']} SET ".implode(', ', $values)." WHERE ".implode(' AND ', $whereSql);
+		return $this->_db->query($sql);
+	}
 }
 
 ?>

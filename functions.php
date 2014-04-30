@@ -64,4 +64,18 @@ function cardHtml($card, $postiton)
 	</div>';
 }
 
+function handHtml($cards)
+{
+	if (empty($cards)) {
+		return '';
+	}
+	$html = '';
+	$postiton = 1;
+	foreach ($cards as $card) {
+		$html .= cardHtml($card, $postiton);
+		$postiton++;
+	}
+	return $html;
+}
+
 ?>

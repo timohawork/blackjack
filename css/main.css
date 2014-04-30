@@ -17,6 +17,10 @@
 	overflow: hidden;
 }
 
+#dealer-block {
+	height: 300px;
+}
+
 #cards-block, #player-info {
 	display: inline-block;
 	float: left;
@@ -30,6 +34,10 @@
 #player-info {
 	border-left: 1px solid #000000;
 	width: 250px;
+}
+
+#player-info span {
+	display: block;
 }
 
 .card-block {

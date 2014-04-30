@@ -7,6 +7,9 @@ class Dealer
 	
 	public function __construct($deck)
 	{
+		if (empty($deck)) {
+			return false;
+		}
 		$this->deck = $deck;
 		foreach ($this->deck as $card) {
 			$card = getCardInfo($card);
