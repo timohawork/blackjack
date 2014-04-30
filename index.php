@@ -3,14 +3,10 @@
 session_start();
 
 include_once 'functions.php';
-include_once './classes/player.php';
-include_once './classes/game.php';
-include_once './classes/dealer.php';
 
 if (!empty($_SESSION)) {
 	$player = new Player($_SESSION['name']);
 	$game = new Game($player);
-	$game->start();
 	if (isset($_GET['do'])) {
 		switch ($_GET['do']) {
 			case 'logout':
@@ -39,6 +35,7 @@ else if (!empty($_POST)) {
 		<title>BlackJack Online</title>
 		<link rel="stylesheet" type="text/css" href="/css/main.css" />
 		<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="/js/functions.js"></script>
 		<script type="text/javascript" src="/js/index.js"></script>
 	</head>
 	<body>
@@ -52,38 +49,10 @@ else if (!empty($_POST)) {
 					</form>
 				</div>
 			<?php else : ?>
-				<div id="dealer-block">
-					<h1>Карты дилера</h1>
-					<?php if (!empty($game->dealer->cards)) : ?>
-						<?=handHtml($game->dealer->cards)?>
-					<?php endif; ?>
-				</div>
+				<div id="dealer-block"></div>
 				<div id="player-block">
-					<div id="cards-block">
-						<h1>Выши карты</h1>
-						<?=handHtml($game->getPlayerCards())?>
-					</div>
-					<div id="player-info">
-						<span>Баланс: <?=$player->money?>$</span>
-						<span>
-							<?php
-								switch ($game->move_code) {
-									case Game::MOVE_CODE_WAITING_FOR_BET:
-										echo '<a id="doBet" href="#">Поставить</a> <select id="betValue" name="betValue">
-											<option value="1">1</option>
-											<option value="2">2</option>
-											<option value="5">5</option>
-											<option value="10">10</option>
-											<option value="25">25</option>
-											<option value="50">50</option>
-											<option value="100">100</option>
-										</select>$';
-									break;
-								}
-							?>
-						</span>
-						<span><a href="index.php?do=logout">Выйти</a></span>
-					</div>
+					<div id="cards-block"></div>
+					<div id="player-info"></div>
 				</div>
 				<div id="debug_block">
 					<h1>DEBUG:</h1>

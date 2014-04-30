@@ -1,5 +1,9 @@
 <?php
 
+include_once dirname(__FILE__).'/classes/player.php';
+include_once dirname(__FILE__).'/classes/game.php';
+include_once dirname(__FILE__).'/classes/dealer.php';
+
 function getCardInfo($card) {
 	$info = explode("*", $card);
 	return 3 == count($info) ? array(

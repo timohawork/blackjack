@@ -34,7 +34,7 @@ class Game extends DB
 		}
 	}
 	
-	public function start()
+	public function move()
 	{
 		switch ($this->getStatus()) {
 			case self::MOVE_CODE_NEW_GAME:
@@ -86,12 +86,7 @@ class Game extends DB
 		else if (is_array($attributes)) {
 			foreach ($attributes as $attribute) {
 				if (isset($this->{$attribute})) {
-					if ('deck' === $attribute) {
-						$values['cards'] = serialize($this->deck);
-					}
-					else {
-						$values[$attribute] = $this->{$attribute};
-					}
+					'deck' === $attribute ? $values['cards'] = serialize($this->deck) : $values[$attribute] = $this->{$attribute};
 				}
 			}
 		}
