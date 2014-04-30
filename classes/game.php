@@ -14,10 +14,10 @@ class Game extends DB
 	const MOVE_CODE_NEW_GAME = 0;
 	const MOVE_CODE_WAITING_FOR_BET = 1;
 	const MOVE_CODE_NEW_DECK = 2;
-	const MOVE_CODE_DEALER = 3;
-	const MOVE_CODE_PLAYER = 4;
-	const MOVE_CODE_WAIT_FOR_RESPONSE = 5;
-
+	const MOVE_CODE_DEALER_TAKES = 3;
+	const MOVE_CODE_PLAYER_TAKES = 4;
+	const MOVE_CODE_WAIT_FOR_PLAYER_RESPONSE = 5;
+	
 	public $player;
 	public $dealer;
 	public $deck;
@@ -31,29 +31,6 @@ class Game extends DB
 			$this->player = $player;
 			$this->getVals(array('deck', 'move_code', 'bet'));
 			$this->dealer = new Dealer($this->deck);
-		}
-	}
-	
-	public function move()
-	{
-		switch ($this->getStatus()) {
-			case self::MOVE_CODE_NEW_GAME:
-				$this->move_code = self::MOVE_CODE_WAITING_FOR_BET;
-				$this->save(array('move_code'));
-			break;
-		
-			case self::MOVE_CODE_WAITING_FOR_BET:
-				
-			break;
-		
-			case self::MOVE_CODE_NEW_DECK:
-				if (null !== $this->bet) {
-					$this->move_code = self::MOVE_CODE_DEALER;
-					$this->newDeck()->save(array('deck', 'move_code'));
-				}
-			break;
-		
-			
 		}
 	}
 	
@@ -195,12 +172,54 @@ class Game extends DB
 		return $cards;
 	}
 	
+	public function nextMove()
+	{
+		$status = $this->getStatus();
+		if ($status['autoMove']) {
+			switch ($status['code']) {
+				case self::MOVE_CODE_NEW_GAME:
+					$this->move_code = self::MOVE_CODE_WAITING_FOR_BET;
+					$this->save(array('move_code'));
+				break;
+
+				case self::MOVE_CODE_NEW_DECK:
+					if (null !== $this->bet) {
+						$this->move_code = self::MOVE_CODE_DEALER;
+						$this->newDeck()->save(array('deck', 'move_code'));
+					}
+				break;
+			
+				case self::MOVE_CODE_DEALER_TAKES:
+					
+				break;
+			}
+		}
+		else {
+			
+		}
+	}
+	
 	public function getStatus()
 	{
 		if (empty($this->move_code)) {
-			return self::MOVE_CODE_NEW_GAME;
+			return array(
+				'code' => self::MOVE_CODE_NEW_GAME,
+				'autoMove' => true
+			);
 		}
-		return $this->move_code;
+		return array(
+			'code' => $this->move_code,
+			'autoMove' => self::iSautoMoveCode($this->move_code)
+		);
+	}
+	
+	protected static function iSautoMoveCode($code)
+	{
+		return in_array($code, array(
+			self::MOVE_CODE_NEW_GAME,
+			self::MOVE_CODE_NEW_DECK,
+			self::MOVE_CODE_DEALER_TAKES
+		));
 	}
 }
 

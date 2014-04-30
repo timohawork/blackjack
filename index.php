@@ -54,36 +54,39 @@ else if (!empty($_POST)) {
 					<div id="cards-block"></div>
 					<div id="player-info"></div>
 				</div>
-				<div id="debug_block">
-					<h1>DEBUG:</h1>
-					<h2>Vars:</h2>
-					<div class="block">
-						<h3>Game:</h3>
-						<table>
-							<tr>
-								<td>Deck:</td>
-								<td><?=var_dump($game->deck)?></td>
-							</tr>
-							<tr>
-								<td>Move_code:</td>
-								<td><?=var_dump($game->move_code)?></td>
-							</tr>
-							<tr>
-								<td>Bet:</td>
-								<td><?=var_dump($game->bet)?></td>
-							</tr>
-						</table>
+				<div id="status-block"></div>
+				<?php if ($config['debug']) : ?>
+					<div id="debug_block">
+						<h1>DEBUG:</h1>
+						<h2>Vars:</h2>
+						<div class="block">
+							<h3>Game:</h3>
+							<table>
+								<tr>
+									<td>Deck:</td>
+									<td><?=var_dump($game->deck)?></td>
+								</tr>
+								<tr>
+									<td>Move_code:</td>
+									<td><?=var_dump($game->move_code)?></td>
+								</tr>
+								<tr>
+									<td>Bet:</td>
+									<td><?=var_dump($game->bet)?></td>
+								</tr>
+							</table>
+						</div>
+						<div class="block">
+							<h3>Player:</h3>
+							<table>
+								<tr>
+									<td>Money:</td>
+									<td><?=var_dump($player->money)?></td>
+								</tr>
+							</table>
+						</div>
 					</div>
-					<div class="block">
-						<h3>Player:</h3>
-						<table>
-							<tr>
-								<td>Money:</td>
-								<td><?=var_dump($player->money)?></td>
-							</tr>
-						</table>
-					</div>
-				</div>
+				<?php endif; ?>
 			<?php endif; ?>
 		</div>
 	</body>

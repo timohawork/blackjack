@@ -1,5 +1,6 @@
 <?php
 
+include_once dirname(__FILE__).'/config.php';
 include_once dirname(__FILE__).'/classes/player.php';
 include_once dirname(__FILE__).'/classes/game.php';
 include_once dirname(__FILE__).'/classes/dealer.php';

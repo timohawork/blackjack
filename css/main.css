@@ -8,6 +8,18 @@
 	text-align: center;
 }
 
+#status-block {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	min-width: 50px;
+	background-color: #ffffff;
+	opacity: 0.4;
+	border: 1px solid #000000;
+	border-radius: 10px;
+	padding: 10px;
+}
+
 #dealer-block, #player-block{
 	position: relative;
 	width: 800px;

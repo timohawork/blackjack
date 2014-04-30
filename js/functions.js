@@ -19,3 +19,40 @@ var ajaxSender = new function() {
 		}
 	}
 };
+
+function statusDesc(status)
+{
+	switch (status.code) {
+		case 0:
+			return 'Новая игра!';
+		break;
+		
+		case 1:
+			return 'Сделайте ставку';
+		break;
+	
+		case 2:
+			return 'Сдаю карты';
+		break;
+	
+		case 3:
+			return 'Дилер раздаёт себе';
+		break;
+	
+		case 4:
+			return '';
+		break;
+	
+		case 5:
+			return '';
+		break;
+	
+		case 6:
+			return '';
+		break;
+	
+		case 7:
+			return '';
+		break;
+	}
+}

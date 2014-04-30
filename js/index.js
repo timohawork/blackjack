@@ -7,6 +7,8 @@ $(document).ready(function() {
 	refreshTable('dealer');
 	refreshTable('player');
 	refreshTable('info');
+	
+	refreshStatus();
 });
 
 function refreshTable(block) {
@@ -35,6 +37,19 @@ function refreshTable(block) {
 		data: {request: block},
 		success: function(response) {
 			selector.html(response);
+		}
+	});
+}
+
+function refreshStatus()
+{
+	ajaxSender.ajax({
+		url: '/ajax/ajax.php',
+		type: "POST",
+		async: false,
+		data: {request: 'status'},
+		success: function(response) {
+			$('#status-block').text(statusDesc($.parseJSON(response)));
 		}
 	});
 }
