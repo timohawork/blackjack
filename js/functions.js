@@ -22,7 +22,7 @@ var ajaxSender = new function() {
 
 function statusDesc(status)
 {
-	switch (status.code) {
+	switch (parseInt(status.code)) {
 		case 0:
 			return 'Новая игра!';
 		break;
@@ -40,11 +40,11 @@ function statusDesc(status)
 		break;
 	
 		case 4:
-			return '';
+			return 'Дилер раздаёт вам';
 		break;
 	
 		case 5:
-			return '';
+			return 'Ещё или хватит?';
 		break;
 	
 		case 6:

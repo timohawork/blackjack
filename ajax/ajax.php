@@ -10,20 +10,16 @@ include_once '../functions.php';
 
 $player = new Player($_SESSION['name']);
 $game = new Game($player);
-$result = '';
+$result = array('result' => null);
 
 switch ($_POST['request']) {
 	case 'status':
-		$result = $game->getStatus();
+		$result['result'] = $game->getStatus();
 	break;
 
 	case 'move':
-		$result = $game->move();
+		$result['result'] = $game->move();
 	break;
-}
-
-if (!is_array($result)) {
-	$result = array('result' => $result);
 }
 
 echo json_encode($result);

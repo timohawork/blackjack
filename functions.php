@@ -22,6 +22,14 @@ function collectCardCode($card)
 	return $card['value'].'*'.$card['lear'].'*'.$card['status'];
 }
 
+function cardPoint($card)
+{
+	if (11 <= $card['value']) {
+		return 10;
+	}
+	return $card['value'];
+}
+
 function cardHtml($card, $postiton)
 {
 	$value = $lear = '';

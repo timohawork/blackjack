@@ -51,10 +51,8 @@ else if (!empty($_POST)) {
 				</div>
 			<?php else : ?>
 				<div id="dealer-block"></div>
-				<div id="player-block">
-					<div id="cards-block"></div>
-					<div id="player-info"></div>
-				</div>
+				<div id="player-block"></div>
+				<div id="player-info"></div>
 				<div id="status-block"></div>
 				<?php if ($config['debug']) : ?>
 					<div id="debug_block">

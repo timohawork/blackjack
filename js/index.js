@@ -4,11 +4,15 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	startGame();
+	refreshTable('dealer');
+	refreshTable('player');
+	refreshTable('info');
 	
-	function startGame()
+	game();
+	
+	function game()
 	{
-		console.log('погнали!');
+		//console.log('обработка хода');
 		var status = getStatus();
 		
 		refreshTable('dealer');
@@ -17,7 +21,7 @@ $(document).ready(function() {
 		$('#status-block').text(statusDesc(status));
 		
 		if (status.autoMove && makeMove()) {
-			setTimeout(function(){startGame()}, 1000);
+			setTimeout(function(){game()}, 2000);
 		}
 	}
 });
@@ -30,7 +34,7 @@ function refreshTable(block) {
 		break;
 		
 		case 'player':
-			selector = $('#cards-block');
+			selector = $('#player-block');
 		break;
 		
 		case 'info':
@@ -66,7 +70,7 @@ function getStatus()
 		}
 	});
 	
-	return status;
+	return status.result;
 }
 
 function makeMove()

@@ -18,12 +18,17 @@ switch ($_POST['request']) {
 	break;
 
 	case 'player':
-		$html = '<h1>Выши карты</h1>'.handHtml($game->getPlayerCards());
+		$playerData = $game->playerData();
+		$html = '<h1>Выши карты</h1>'.handHtml($playerData['cards']).'<span class="points">'.$playerData['points'].'</span>';
 	break;
 
 	case 'info':
 		$html = '<span>Баланс: '.$player->money.'$</span>
 			<span>';
+		if (!empty($game->bet)) {
+			$html .= 'Ставка: '.$game->bet.'$</span>
+			<span>';
+		}
 		switch ($game->move_code) {
 			case Game::MOVE_CODE_WAITING_FOR_BET:
 				$html .= '<a id="doBet" href="#">Поставить</a> <select id="betValue" name="betValue">
@@ -38,7 +43,6 @@ switch ($_POST['request']) {
 			break;
 		}
 		$html .= '</span>
-			<span><a id="status" href="#">Статус</a></span>
 			<span><a href="index.php?do=logout">Выйти</a></span>';
 	break;
 }

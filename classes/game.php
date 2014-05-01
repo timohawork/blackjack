@@ -144,27 +144,34 @@ class Game extends DB
 		return $this;
 	}
 	
-	public function getPlayerCards()
+	public function playerData()
 	{
 		if (empty($this->deck)) {
 			return false;
 		}
-		$cards = array();
+		$result = array(
+			'cards' => array(),
+			'points' => 0
+		);
 		foreach ($this->deck as $card) {
 			$card = getCardInfo($card);
 			if (false !== $card && self::CARD_STATUS_PLAYER == $card['status']) {
-				$cards[] = array(
+				$result['cards'][] = array(
 					'value' => $card['value'],
 					'lear' => $card['lear'],
 				);
+				$result['points'] += cardPoint($card);
 			}
 		}
-		return $cards;
+		return $result;
 	}
 	
 	public function move()
 	{
 		$status = $this->getStatus();
+		$nextCard = $this->getNextCard();
+		$playerData = $this->playerData();
+		
 		switch ($status['code']) {
 			case self::MOVE_CODE_NEW_GAME:
 				$this->move_code = self::MOVE_CODE_WAITING_FOR_BET;
@@ -179,16 +186,31 @@ class Game extends DB
 			break;
 
 			case self::MOVE_CODE_DEALER_TAKES:
-				$nextCard = $this->getNextCard();
-				$playerCards = $this->getPlayerCards();
 				if (null === $nextCard) {
 					return false;
 				}
+
 				if (2 > count($this->dealer->cards)) {
 					$nextCard['status'] = self::CARD_STATUS_DEALER;
 					
-					if (1 == count($this->dealer->cards) && !count($playerCards)) {
+					if (1 == count($this->dealer->cards) && !count($playerData['cards'])) {
 						$this->move_code = self::MOVE_CODE_PLAYER_TAKES;
+						$this->save(array('move_code'));
+					}
+					return $this->saveCard($nextCard);
+				}
+			break;
+			
+			case self::MOVE_CODE_PLAYER_TAKES:
+				if (null === $nextCard) {
+					return false;
+				}
+
+				if (2 > count($playerData['cards'])) {
+					$nextCard['status'] = self::CARD_STATUS_PLAYER;
+					
+					if (1 == count($playerData['cards'])) {
+						$this->move_code = self::MOVE_CODE_WAIT_FOR_PLAYER_RESPONSE;
 						$this->save(array('move_code'));
 					}
 					return $this->saveCard($nextCard);
@@ -240,7 +262,8 @@ class Game extends DB
 		return in_array($code, array(
 			self::MOVE_CODE_NEW_GAME,
 			self::MOVE_CODE_NEW_DECK,
-			self::MOVE_CODE_DEALER_TAKES
+			self::MOVE_CODE_DEALER_TAKES,
+			self::MOVE_CODE_PLAYER_TAKES
 		));
 	}
 }
