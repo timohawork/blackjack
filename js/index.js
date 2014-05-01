@@ -1,6 +1,7 @@
 $(document).ready(function() {
 	$('#doBet').live('click', function() {
-		window.location.href = 'index.php?do=bet&bet='+$('#betValue').val();
+		addBet($('#betValue').val());
+		game();
 		return false;
 	});
 	
@@ -82,6 +83,23 @@ function makeMove()
 		type: "POST",
 		async: false,
 		data: {request: 'move'},
+		success: function(response) {
+			request = $.parseJSON(response);
+		}
+	});
+	
+	return request.result;
+}
+
+function addBet(bet)
+{
+	var request;
+	
+	ajaxSender.ajax({
+		url: '/ajax/ajax.php',
+		type: "POST",
+		async: false,
+		data: {request: 'bet', bet: bet},
 		success: function(response) {
 			request = $.parseJSON(response);
 		}

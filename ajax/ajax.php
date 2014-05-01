@@ -20,6 +20,15 @@ switch ($_POST['request']) {
 	case 'move':
 		$result['result'] = $game->move();
 	break;
+
+	case 'bet':
+		if (empty($_POST['bet'])) {
+			return false;
+		}
+		$game->bet = $_POST['bet'];
+		$game->move_code = Game::MOVE_CODE_NEW_DECK;
+		$result['result'] = $game->save(array('bet', 'move_code'));
+	break;
 }
 
 echo json_encode($result);
