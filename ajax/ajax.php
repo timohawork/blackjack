@@ -36,7 +36,8 @@ switch ($_POST['request']) {
 	break;
 
 	case 'enough':
-		
+		$game->move_code = Game::MOVE_CODE_WAIT_FOR_DEALER_RESPONSE;
+		$result['result'] = $game->save(array('move_code'));
 	break;
 }
 

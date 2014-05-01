@@ -14,7 +14,7 @@ $html = '';
 
 switch ($_POST['request']) {
 	case 'dealer':
-		$html = '<h1>Карты дилера</h1>'.(!empty($game->dealer->cards) ? handHtml($game->dealer->cards) : '');
+		$html = '<h1>Карты дилера</h1>'.(!empty($game->dealer->cards) ? handHtml($game->dealer->cards) : '').'<span class="points">'.$game->dealer->points.'</span>';
 	break;
 
 	case 'player':

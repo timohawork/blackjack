@@ -18,6 +18,10 @@ class Game extends DB
 	const MOVE_CODE_DEALER_TAKES = 3;
 	const MOVE_CODE_PLAYER_TAKES = 4;
 	const MOVE_CODE_WAIT_FOR_PLAYER_RESPONSE = 5;
+	const MOVE_CODE_WAIT_FOR_DEALER_RESPONSE = 6;
+	
+	const MOVE_CODE_DEALER_WIN = 7;
+	const MOVE_CODE_PLAYER_WIN = 8;
 	
 	public $player;
 	public $dealer;
@@ -160,7 +164,7 @@ class Game extends DB
 					'value' => $card['value'],
 					'lear' => $card['lear'],
 				);
-				$result['points'] += cardPoint($card);
+				$result['points'] += cardPoint($card['value']);
 			}
 		}
 		return $result;
@@ -190,15 +194,19 @@ class Game extends DB
 					return false;
 				}
 
-				if (2 > count($this->dealer->cards)) {
-					$nextCard['status'] = self::CARD_STATUS_DEALER;
-					
-					if (1 == count($this->dealer->cards) && !count($playerData['cards'])) {
-						$this->move_code = self::MOVE_CODE_PLAYER_TAKES;
-						$this->save(array('move_code'));
-					}
-					return $this->saveCard($nextCard);
+				$nextCard['status'] = self::CARD_STATUS_DEALER;
+				$this->saveCard($nextCard);
+				
+				if (0 == count($this->dealer->cards)) {
+					$this->move_code = self::MOVE_CODE_DEALER_TAKES;
 				}
+				else if (1 == count($this->dealer->cards) && !count($playerData['cards'])) {
+					$this->move_code = self::MOVE_CODE_PLAYER_TAKES;
+				}
+				else {
+					$this->move_code = self::MOVE_CODE_WAIT_FOR_DEALER_RESPONSE;
+				}
+				return $this->save(array('move_code'));
 			break;
 			
 			case self::MOVE_CODE_PLAYER_TAKES:
@@ -218,6 +226,21 @@ class Game extends DB
 			
 			case self::MOVE_CODE_WAIT_FOR_PLAYER_RESPONSE:
 				
+			break;
+		
+			case self::MOVE_CODE_WAIT_FOR_DEALER_RESPONSE:
+				if (21 == $playerData['points'] || 21 < $this->dealer->points) {
+					$this->move_code = self::MOVE_CODE_PLAYER_WIN;
+					return $this->save(array('move_code'));
+				}
+				if (21 == $this->dealer->points || 21 < $playerData['points']) {
+					$this->move_code = self::MOVE_CODE_DEALER_WIN;
+					return $this->save(array('move_code'));
+				}
+				if (21 > $this->dealer->points) {
+					$this->move_code = self::MOVE_CODE_DEALER_TAKES;
+					return $this->save(array('move_code'));
+				}
 			break;
 		}
 	}
@@ -266,7 +289,8 @@ class Game extends DB
 			self::MOVE_CODE_NEW_GAME,
 			self::MOVE_CODE_NEW_DECK,
 			self::MOVE_CODE_DEALER_TAKES,
-			self::MOVE_CODE_PLAYER_TAKES
+			self::MOVE_CODE_PLAYER_TAKES,
+			self::MOVE_CODE_WAIT_FOR_DEALER_RESPONSE
 		));
 	}
 }

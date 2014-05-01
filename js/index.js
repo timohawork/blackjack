@@ -18,6 +18,20 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	$('#enough').live('click', function() {
+		ajaxSender.ajax({
+			url: '/ajax/ajax.php',
+			type: "POST",
+			async: false,
+			data: {request: 'enough'},
+			success: function(response) {
+				response = $.parseJSON(response);
+				response.result && game();
+			}
+		});
+		return false;
+	});
+	
 	/*$('#getCard').live('click', function() {
 		return false;
 	});*/

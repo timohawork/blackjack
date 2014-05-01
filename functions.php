@@ -24,10 +24,10 @@ function collectCardCode($card)
 
 function cardPoint($card)
 {
-	if (11 <= $card['value']) {
+	if (11 <= $card) {
 		return 10;
 	}
-	return $card['value'];
+	return $card;
 }
 
 function cardHtml($card, $postiton)

@@ -4,6 +4,7 @@ class Dealer
 {
 	public $deck;
 	public $cards = array();
+	public $points;
 	
 	public function __construct($deck)
 	{
@@ -12,6 +13,7 @@ class Dealer
 		}
 		$this->deck = $deck;
 		$this->getCards();
+		$this->getPoints();
 	}
 	
 	public function setDeck($deck)
@@ -34,6 +36,18 @@ class Dealer
 			}
 		}
 		return $this->cards;
+	}
+	
+	public function getPoints()
+	{
+		if (empty($this->cards)) {
+			return 0;
+		}
+		$this->points = 0;
+		foreach ($this->cards as $card) {
+			$this->points += cardPoint($card['value']);
+		}
+		return $this->points;
 	}
 }
 

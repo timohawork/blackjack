@@ -48,11 +48,15 @@ function statusDesc(status)
 		break;
 	
 		case 6:
-			return '';
+			return 'Дилер думает';
 		break;
 	
 		case 7:
-			return '';
+			return 'Дилер выиграл!';
+		break;
+	
+		case 8:
+			return 'Вы виграли!<a id="next" href="#">Играть дальше</a>';
 		break;
 	}
 }
