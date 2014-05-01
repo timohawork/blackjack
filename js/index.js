@@ -4,11 +4,22 @@ $(document).ready(function() {
 		return false;
 	});
 	
-	refreshTable('dealer');
-	refreshTable('player');
-	refreshTable('info');
+	startGame();
 	
-	refreshStatus();
+	function startGame()
+	{
+		console.log('погнали!');
+		var status = getStatus();
+		
+		refreshTable('dealer');
+		refreshTable('player');
+		refreshTable('info');
+		$('#status-block').text(statusDesc(status));
+		
+		if (status.autoMove && makeMove()) {
+			setTimeout(function(){startGame()}, 1000);
+		}
+	}
 });
 
 function refreshTable(block) {
@@ -41,15 +52,36 @@ function refreshTable(block) {
 	});
 }
 
-function refreshStatus()
+function getStatus()
 {
+	var status;
+	
 	ajaxSender.ajax({
 		url: '/ajax/ajax.php',
 		type: "POST",
 		async: false,
 		data: {request: 'status'},
 		success: function(response) {
-			$('#status-block').text(statusDesc($.parseJSON(response)));
+			status = $.parseJSON(response);
 		}
 	});
+	
+	return status;
+}
+
+function makeMove()
+{
+	var request;
+	
+	ajaxSender.ajax({
+		url: '/ajax/ajax.php',
+		type: "POST",
+		async: false,
+		data: {request: 'move'},
+		success: function(response) {
+			request = $.parseJSON(response);
+		}
+	});
+	
+	return request.result;
 }

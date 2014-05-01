@@ -5,6 +5,7 @@ class Game extends DB
 	const CARD_STATUS_OPEN = 1;
 	const CARD_STATUS_DEALER = 2;
 	const CARD_STATUS_PLAYER = 3;
+	const CARD_STATUS_REBOUND = 4;
 
 	const CODE_DIAMONDS = 1; // бубна
 	const CODE_CLUBS = 2; // креста
@@ -139,17 +140,6 @@ class Game extends DB
 		}
 		shuffle($deckMass);
 
-		foreach ($deckMass as $num => $card) {
-			$card = getCardInfo($card);
-			if (0 == $num || 1 == $num) {
-				$card['status'] = self::CARD_STATUS_PLAYER;
-				$deckMass[$num] = collectCardCode($card);
-			}
-			else if (2 == $num || 3 == $num) {
-				$card['status'] = self::CARD_STATUS_DEALER;
-				$deckMass[$num] = collectCardCode($card);
-			}
-		}
 		$this->deck = $deckMass;
 		return $this;
 	}
@@ -172,31 +162,63 @@ class Game extends DB
 		return $cards;
 	}
 	
-	public function nextMove()
+	public function move()
 	{
 		$status = $this->getStatus();
-		if ($status['autoMove']) {
-			switch ($status['code']) {
-				case self::MOVE_CODE_NEW_GAME:
-					$this->move_code = self::MOVE_CODE_WAITING_FOR_BET;
-					$this->save(array('move_code'));
-				break;
+		switch ($status['code']) {
+			case self::MOVE_CODE_NEW_GAME:
+				$this->move_code = self::MOVE_CODE_WAITING_FOR_BET;
+				return $this->save(array('move_code'));
+			break;
 
-				case self::MOVE_CODE_NEW_DECK:
-					if (null !== $this->bet) {
-						$this->move_code = self::MOVE_CODE_DEALER;
-						$this->newDeck()->save(array('deck', 'move_code'));
-					}
-				break;
-			
-				case self::MOVE_CODE_DEALER_TAKES:
+			case self::MOVE_CODE_NEW_DECK:
+				if (null !== $this->bet) {
+					$this->move_code = self::MOVE_CODE_DEALER_TAKES;
+					return $this->newDeck()->save(array('deck', 'move_code'));
+				}
+			break;
+
+			case self::MOVE_CODE_DEALER_TAKES:
+				$nextCard = $this->getNextCard();
+				$playerCards = $this->getPlayerCards();
+				if (null === $nextCard) {
+					return false;
+				}
+				if (2 > count($this->dealer->cards)) {
+					$nextCard['status'] = self::CARD_STATUS_DEALER;
 					
-				break;
+					if (1 == count($this->dealer->cards) && !count($playerCards)) {
+						$this->move_code = self::MOVE_CODE_PLAYER_TAKES;
+						$this->save(array('move_code'));
+					}
+					return $this->saveCard($nextCard);
+				}
+			break;
+		}
+	}
+	
+	public function getNextCard()
+	{
+		if (empty($this->deck)) {
+			return null;
+		}
+		$card = null;
+		foreach ($this->deck as $pos => $card) {
+			$card = getCardInfo($card);
+			if (self::CARD_STATUS_OPEN == $card['status']) {
+				$card['pos'] = $pos;
+				return $card;
 			}
 		}
-		else {
-			
+	}
+	
+	public function saveCard($card)
+	{
+		if (empty($card)) {
+			return false;
 		}
+		$this->deck[$card['pos']] = collectCardCode($card);
+		return $this->save(array('deck'));
 	}
 	
 	public function getStatus()

@@ -18,7 +18,7 @@ switch ($_POST['request']) {
 	break;
 
 	case 'move':
-		$result = $game->nextMove();
+		$result = $game->move();
 	break;
 }
 

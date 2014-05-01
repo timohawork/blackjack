@@ -14,7 +14,8 @@ if (!empty($_SESSION)) {
 			break;
 		
 			case 'bet':
-				if (isset($_GET['bet']) && Game::MOVE_CODE_WAITING_FOR_BET == $game->getStatus()) {
+				$status = $game->getStatus();
+				if (isset($_GET['bet']) && Game::MOVE_CODE_WAITING_FOR_BET == $status['code']) {
 					$game->bet = $_GET['bet'];
 					$game->move_code = Game::MOVE_CODE_NEW_DECK;
 					$game->save(array('bet', 'move_code'));

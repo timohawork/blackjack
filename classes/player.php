@@ -68,6 +68,35 @@ class Player extends DB
 			))
 		));
 	}
+	
+	public function save($attributes = array())
+	{
+		if (empty($this->name)) {
+			return false;
+		}
+		
+		$values = array();
+		if (empty($attributes)) {
+			$values['money'] = $this->money;
+		}
+		else {
+			foreach ($attributes as $attribute) {
+				if (isset($this->{$attribute})) {
+					$values[$attribute] = $this->{$attribute};
+				}
+			}
+		}
+		
+		return $this->update(array(
+			'table' => 'players',
+			'values' => $values,
+			'where' => array(array(
+				'name' => 'id',
+				'operator' => '=',
+				'value' => $this->id
+			))
+		));
+	}
 }
 
 ?>

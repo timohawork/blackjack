@@ -11,6 +11,19 @@ class Dealer
 			return false;
 		}
 		$this->deck = $deck;
+		$this->getCards();
+	}
+	
+	public function setDeck($deck)
+	{
+		$this->deck = $deck;
+	}
+	
+	public function getCards()
+	{
+		if (empty($this->deck)) {
+			return false;
+		}
 		foreach ($this->deck as $card) {
 			$card = getCardInfo($card);
 			if (false !== $card && Game::CARD_STATUS_DEALER == $card['status']) {
@@ -20,6 +33,7 @@ class Dealer
 				);
 			}
 		}
+		return $this->cards;
 	}
 }
 

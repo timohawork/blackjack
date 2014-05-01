@@ -1,7 +1,7 @@
 <?php
 
 $config = array(
-	'debug' => false
+	'debug' => true
 );
 
 ?>
