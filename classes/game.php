@@ -205,16 +205,19 @@ class Game extends DB
 				if (null === $nextCard) {
 					return false;
 				}
+				
+				$nextCard['status'] = self::CARD_STATUS_PLAYER;
+				$this->saveCard($nextCard);
 
-				if (2 > count($playerData['cards'])) {
-					$nextCard['status'] = self::CARD_STATUS_PLAYER;
-					
-					if (1 == count($playerData['cards'])) {
-						$this->move_code = self::MOVE_CODE_WAIT_FOR_PLAYER_RESPONSE;
-						$this->save(array('move_code'));
-					}
-					return $this->saveCard($nextCard);
+				if (0 < count($playerData['cards'])) {
+					$this->move_code = self::MOVE_CODE_WAIT_FOR_PLAYER_RESPONSE;
+					return $this->save(array('move_code'));
 				}
+				return true;
+			break;
+			
+			case self::MOVE_CODE_WAIT_FOR_PLAYER_RESPONSE:
+				
 			break;
 		}
 	}

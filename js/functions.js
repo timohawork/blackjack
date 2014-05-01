@@ -44,7 +44,7 @@ function statusDesc(status)
 		break;
 	
 		case 5:
-			return 'Ещё или хватит?';
+			return '<a id="getCard" href="#">Ещё</a> или <a id="enough" href="#">хватит</a>?';
 		break;
 	
 		case 6:

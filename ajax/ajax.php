@@ -29,6 +29,15 @@ switch ($_POST['request']) {
 		$game->move_code = Game::MOVE_CODE_NEW_DECK;
 		$result['result'] = $game->save(array('bet', 'move_code'));
 	break;
+	
+	case 'getCard':
+		$game->move_code = Game::MOVE_CODE_PLAYER_TAKES;
+		$result['result'] = $game->save(array('move_code'));
+	break;
+
+	case 'enough':
+		
+	break;
 }
 
 echo json_encode($result);
